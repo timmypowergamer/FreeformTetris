@@ -12,6 +12,8 @@ public class WallGenerator : MonoBehaviour
     public float depth = 1;
     public int numVertices = 16;
     public float checkDiameter = 0.1f;
+	
+	float holeCoverage;
 
     // Start is called before the first frame update
     void Start()
@@ -69,16 +71,23 @@ public class WallGenerator : MonoBehaviour
         mf = GetComponent<MeshFilter>();
         mf.mesh = mesh;
         transform.GetComponent<MeshCollider>().sharedMesh = mesh;
+		
+		holeCoverage = 1.0f - computeCoverage("Default");
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        int score = computeScore();
+        var score = computeScore();
         Debug.Log($"{score}");
     }
+	
+	float computeScore()
+	{
+		return computeCoverage("Objects") / holeCoverage;
+	}
 
-    int computeScore()
+    float computeCoverage(string layer)
     {
         int numChecksHoriz = Mathf.FloorToInt(width / checkDiameter);
         int numChecksVert = Mathf.FloorToInt(height / checkDiameter);
@@ -87,9 +96,9 @@ public class WallGenerator : MonoBehaviour
         var globalHalfExtents = transform.TransformVector(localHalfExtents);
         var quat = Quaternion.LookRotation(transform.forward, transform.up);
         float zLocal = 0.5f * depth;
-        var objectsMask = LayerMask.GetMask("Objects");
+        var objectsMask = LayerMask.GetMask(layer);
 
-        int score = 0;
+        int count = 0;
         for (int row = 0; row < numChecksVert; row++)
         {
             float yLocal = (row + 0.5f) * checkDiameter - 0.5f * height;
@@ -100,12 +109,12 @@ public class WallGenerator : MonoBehaviour
                 var globalCenter = transform.TransformPoint(localCenter);
                 if (Physics.CheckBox(globalCenter, globalHalfExtents, quat, objectsMask))
                 {
-                    score++;
+                    count++;
                 }
 
             }
         }
 
-        return score;
+        return (float)count / numChecksHoriz / numChecksVert;
     }
 }
