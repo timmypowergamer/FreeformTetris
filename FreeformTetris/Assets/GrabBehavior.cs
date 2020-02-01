@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GrabBehavior : MonoBehaviour
 {
-	private Rigidbody collidingItem;
 	private SpringJoint joint;
 	private Rigidbody grabbedItem;
 
@@ -13,50 +12,51 @@ public class GrabBehavior : MonoBehaviour
 	[SerializeField] private float SpringForce = 200f;
 	[SerializeField] private float GrabDrag = 20f;
 	[SerializeField] private float GrabAngularDrag = 5f;
+	[SerializeField] private float GrabDistance = 2.5f;
+	[SerializeField] private LayerMask mask;
+
+	[SerializeField] private Transform crosshair;
 
 	private float previousDrag;
 	private float previousAngularDrag;
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if(other.attachedRigidbody != null && collidingItem == null)
-		{
-			collidingItem = other.attachedRigidbody;
-			Debug.Log($"colliding with {collidingItem.name}");
-		}
-	}
-
-	private void OnTriggerExit(Collider other)
-	{
-		if(collidingItem == other.attachedRigidbody)
-		{
-			Debug.Log($"{collidingItem.name} left");
-			collidingItem = null;
-		}
-	}
-
 	public bool IsGrabbing { get { return grabbedItem != null; } }
+
+	private void FixedUpdate()
+	{
+		RaycastHit hit;
+		if (Physics.Raycast(transform.position, transform.forward, out hit, GrabDistance, mask))
+		{
+			crosshair.transform.position = hit.point;
+		}
+		else
+		{
+			crosshair.transform.localPosition = Vector3.zero;
+		}
+	}
 
 	public void Grab()
 	{
-		if(collidingItem != null)
+		if (grabbedItem == null)
 		{
-			Debug.Log($"Grabbing {collidingItem.name}");
-			grabbedItem = collidingItem;
-			previousDrag = grabbedItem.drag;
-			previousAngularDrag = grabbedItem.angularDrag;
-			grabbedItem.angularDrag = GrabAngularDrag;
-			grabbedItem.drag = GrabDrag;
-			//grabbedItem.useGravity = false;
-			joint = gameObject.AddComponent<SpringJoint>();
-			joint.autoConfigureConnectedAnchor = false;
-			//joint.
-			joint.anchor = Vector3.zero;
-			joint.spring = SpringForce;
-			joint.damper = SpringDamper;
-			joint.breakForce = BreakForce;
-			joint.connectedBody = grabbedItem;
-			joint.connectedAnchor = Vector3.zero;
+			RaycastHit hit;
+			if (Physics.Raycast(transform.position, transform.forward, out hit, GrabDistance, mask))
+			{
+				grabbedItem = hit.rigidbody;
+				previousDrag = grabbedItem.drag;
+				previousAngularDrag = grabbedItem.angularDrag;
+				grabbedItem.angularDrag = GrabAngularDrag;
+				grabbedItem.drag = GrabDrag;
+				grabbedItem.useGravity = false;
+				joint = gameObject.AddComponent<SpringJoint>();
+				joint.autoConfigureConnectedAnchor = false;
+				joint.anchor = transform.InverseTransformPoint(hit.point);
+				joint.connectedAnchor = grabbedItem.transform.InverseTransformPoint(hit.point);
+				joint.spring = SpringForce;
+				joint.damper = SpringDamper;
+				joint.breakForce = BreakForce;
+				joint.connectedBody = grabbedItem;
+			}
 		}
 	}
 
@@ -64,7 +64,7 @@ public class GrabBehavior : MonoBehaviour
 	{
 		if (grabbedItem != null)
 		{
-			//grabbedItem.useGravity = true;
+			grabbedItem.useGravity = true;
 			grabbedItem.drag = previousDrag;
 			grabbedItem.angularDrag = previousAngularDrag;
 			if(joint != null) Destroy(joint);

@@ -142,6 +142,7 @@ public class PlayerController : MonoBehaviour
 			{
 				if (Physics.CheckSphere(GroundCheckLocation.position, GroundCheckDistance, GroundMask))
 				{
+					//Debug.Log("Grounded");
 					CurrentGroundState = GroundState.GROUNDED;
 				}
 				else
@@ -171,7 +172,8 @@ public class PlayerController : MonoBehaviour
 			//jump
 			if(CurrentGroundState == GroundState.GROUNDED && jumpPressed)
 			{
-				Velocity.y += JumpVelocity;
+				Velocity.y = JumpVelocity;
+				//Velocity.y += JumpVelocity;
 				CurrentGroundState = GroundState.JUMPING;
 			}
 			Controller.Move(Velocity * Time.fixedDeltaTime);
