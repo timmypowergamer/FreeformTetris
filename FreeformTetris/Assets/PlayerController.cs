@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private CharacterController Controller;
 	[SerializeField] private Camera Camera;
 	[SerializeField] private Transform GroundCheckLocation;
-	[SerializeField] private Transform GrabPoint;
+	[SerializeField] private GrabBehavior GrabPoint;
 
 	[SerializeField] private float MoveSpeed = 5;
 	[SerializeField] private float LookSensitivity = 3;
@@ -38,8 +38,6 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private float GroundCheckDistance = 0.4f;
 	[SerializeField] private LayerMask GroundMask;
 	[SerializeField] private float JumpVelocity = 10f;
-	[SerializeField] private float GrabRadius = 0.4f;
-	[SerializeField] private LayerMask GrabMask;
 
 	//movement
 	private Vector2 MoveInputValue;
@@ -63,7 +61,7 @@ public class PlayerController : MonoBehaviour
 		GameManager.Instance.OnGameStarted += OnGameStart;
 		CurrentPlayerState = PlayerState.JOINED;
 		Controller.enabled = false;
-		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
 		Camera.enabled = false;
 	}
 
@@ -167,15 +165,9 @@ public class PlayerController : MonoBehaviour
 			Vector3 movement = (Controller.transform.right * MoveInputValue.x + Controller.transform.forward * MoveInputValue.y) * MoveSpeed;
 			Velocity.x = movement.x;
 			Velocity.z = movement.z;
-			if (CurrentGroundState != GroundState.GROUNDED)
-			{
-				//gravity
-				Velocity.y += Gravity * Time.fixedDeltaTime;
-			}
-			else
-			{
-				Velocity.y = Controller.velocity.y;
-			}
+			//gravity
+			Velocity.y += Gravity * Time.fixedDeltaTime;
+
 			//jump
 			if(CurrentGroundState == GroundState.GROUNDED && jumpPressed)
 			{
@@ -185,17 +177,13 @@ public class PlayerController : MonoBehaviour
 			Controller.Move(Velocity * Time.fixedDeltaTime);
 			jumpPressed = false;
 
-			if (heldObject == null && grabPressed)
+			if (grabPressed && !GrabPoint.IsGrabbing)
 			{
-				RaycastHit hitInfo;
-				if (Physics.SphereCast(GrabPoint.position, GrabRadius, GrabPoint.forward, out hitInfo, 0.01f, GrabMask))
-				{
-					Grab(hitInfo.collider.attachedRigidbody);
-				}
+				GrabPoint.Grab();
 			}
-			else if (heldObject != null && !grabHeld)
+			else if (!grabHeld && GrabPoint.IsGrabbing)
 			{
-				ReleaseItem();
+				GrabPoint.Release();
 			}
 			grabPressed = false;
 		}
@@ -205,18 +193,25 @@ public class PlayerController : MonoBehaviour
 
 	private void Grab(Rigidbody item)
 	{
-		heldObject = item;
-		heldObject.isKinematic = true;
-		heldObject.transform.parent = GrabPoint;
-		//heldObject.transform.localPosition = Vector3.zero;
+		if (item != null)
+		{
+			heldObject = item;
+			//heldObject.isKinematic = true;
+			//heldObject.transform.parent = GrabPoint.transform;
+			//heldObject.transform.localPosition = Vector3.zero;
+			GrabPoint.Grab();
+			Debug.Log($"Item {item.name} + grabbed");
+		}
 	}
 
 	private void ReleaseItem()
 	{
 		if(heldObject != null)
 		{
-			heldObject.isKinematic = false;
-			heldObject.transform.parent = null;
+			//heldObject.isKinematic = false;
+			//heldObject.transform.parent = null;
+			Debug.Log($"Item {heldObject.name} + released");
+			heldObject = null;
 		}
 	}
 
