@@ -11,6 +11,7 @@ public class WallGenerator : MonoBehaviour
     public float height = 5;
     public float depth = 1;
     public int numVertices = 16;
+    public float checkDiameter = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -71,8 +72,40 @@ public class WallGenerator : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        int score = computeScore();
+        Debug.Log($"{score}");
+    }
+
+    int computeScore()
+    {
+        int numChecksHoriz = Mathf.FloorToInt(width / checkDiameter);
+        int numChecksVert = Mathf.FloorToInt(height / checkDiameter);
+
+        var localHalfExtents = new Vector3(0.5f * checkDiameter, 0.5f * checkDiameter, 0.5f * depth);
+        var globalHalfExtents = transform.TransformVector(localHalfExtents);
+        var quat = Quaternion.LookRotation(transform.forward, transform.up);
+        float zLocal = 0.5f * depth;
+        var objectsMask = LayerMask.GetMask("Objects");
+
+        int score = 0;
+        for (int row = 0; row < numChecksVert; row++)
+        {
+            float yLocal = (row + 0.5f) * checkDiameter - 0.5f * height;
+            for (int col = 0; col < numChecksHoriz; col++)
+            {
+                float xLocal = (col + 0.5f) * checkDiameter - 0.5f * width;
+                var localCenter = new Vector3(xLocal, yLocal, zLocal);
+                var globalCenter = transform.TransformPoint(localCenter);
+                if (Physics.CheckBox(globalCenter, globalHalfExtents, quat, objectsMask))
+                {
+                    score++;
+                }
+
+            }
+        }
+
+        return score;
     }
 }
