@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private CharacterController Controller;
 	[SerializeField] private Camera Camera;
 	[SerializeField] private Transform GroundCheckLocation;
+	[SerializeField] private GrabBehavior GrabPoint;
 
 	[SerializeField] private float MoveSpeed = 5;
 	[SerializeField] private float LookSensitivity = 3;
@@ -44,10 +45,14 @@ public class PlayerController : MonoBehaviour
 	private Vector2 lookRotation;
 	private Vector3 Velocity;
 	private bool jumpPressed = false;
+	private bool grabHeld = false;
+	private bool grabPressed = false;
 
 
 	private PlayerInput Input;
 	private Transform spawnPoint;
+
+	private Rigidbody heldObject;
 
 	private void OnEnable()
 	{
@@ -56,7 +61,7 @@ public class PlayerController : MonoBehaviour
 		GameManager.Instance.OnGameStarted += OnGameStart;
 		CurrentPlayerState = PlayerState.JOINED;
 		Controller.enabled = false;
-		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
 		Camera.enabled = false;
 	}
 
@@ -67,12 +72,30 @@ public class PlayerController : MonoBehaviour
 
 	public void Move(InputAction.CallbackContext context)
 	{
-		MoveInputValue = context.ReadValue<Vector2>();		
+		if(CurrentPlayerState == PlayerState.PLAYING)
+			MoveInputValue = context.ReadValue<Vector2>();		
 	}
 	
 	public void Look(InputAction.CallbackContext context)
 	{
-		LookInputValue = context.ReadValue<Vector2>();
+		if (CurrentPlayerState == PlayerState.PLAYING)
+			LookInputValue = context.ReadValue<Vector2>();
+	}
+
+	public void Grab(InputAction.CallbackContext context)
+	{
+		if (CurrentPlayerState == PlayerState.PLAYING)
+		{
+			grabPressed = context.phase == InputActionPhase.Performed;
+			if (!grabHeld && context.phase == InputActionPhase.Started)
+			{
+				grabHeld = true;
+			}
+			if (grabHeld && context.phase == InputActionPhase.Canceled)
+			{
+				grabHeld = false;
+			}
+		}
 	}
 
 	public void Ready(InputAction.CallbackContext context)
@@ -104,6 +127,7 @@ public class PlayerController : MonoBehaviour
 	public void Respawn()
 	{
 		CurrentPlayerState = PlayerState.PLAYING;
+		Velocity = Vector3.zero;
 		Controller.enabled = true;
 		Camera.enabled = true;
 		CurrentGroundState = GroundState.GROUNDED;
@@ -141,15 +165,9 @@ public class PlayerController : MonoBehaviour
 			Vector3 movement = (Controller.transform.right * MoveInputValue.x + Controller.transform.forward * MoveInputValue.y) * MoveSpeed;
 			Velocity.x = movement.x;
 			Velocity.z = movement.z;
-			if (CurrentGroundState != GroundState.GROUNDED)
-			{
-				//gravity
-				Velocity.y += Gravity * Time.fixedDeltaTime;
-			}
-			else
-			{
-				Velocity.y = Controller.velocity.y;
-			}
+			//gravity
+			Velocity.y += Gravity * Time.fixedDeltaTime;
+
 			//jump
 			if(CurrentGroundState == GroundState.GROUNDED && jumpPressed)
 			{
@@ -158,6 +176,42 @@ public class PlayerController : MonoBehaviour
 			}
 			Controller.Move(Velocity * Time.fixedDeltaTime);
 			jumpPressed = false;
+
+			if (grabPressed && !GrabPoint.IsGrabbing)
+			{
+				GrabPoint.Grab();
+			}
+			else if (!grabHeld && GrabPoint.IsGrabbing)
+			{
+				GrabPoint.Release();
+			}
+			grabPressed = false;
+		}
+
+		
+	}
+
+	private void Grab(Rigidbody item)
+	{
+		if (item != null)
+		{
+			heldObject = item;
+			//heldObject.isKinematic = true;
+			//heldObject.transform.parent = GrabPoint.transform;
+			//heldObject.transform.localPosition = Vector3.zero;
+			GrabPoint.Grab();
+			Debug.Log($"Item {item.name} + grabbed");
+		}
+	}
+
+	private void ReleaseItem()
+	{
+		if(heldObject != null)
+		{
+			//heldObject.isKinematic = false;
+			//heldObject.transform.parent = null;
+			Debug.Log($"Item {heldObject.name} + released");
+			heldObject = null;
 		}
 	}
 
