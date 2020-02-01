@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class HoleGeometry
 {
-	public static Vector2[] Create(float maxWidth, float maxHeight, int numVertices)
+	public static Vector2[] Create(float maxWidth, float maxHeight, float minRadius, float maxRadius, int numVertices)
 	{
 		var result = new Vector2[2 * numVertices];
 		
@@ -14,9 +14,6 @@ public static class HoleGeometry
 		float quadrantAngle = 2.0f * Mathf.Atan(maxHeight / maxWidth);
 		float stepAngle = quadrantAngle / numQuadrantVertices;
 
-        float minRadius = 0.25f;
-        float maxRadius = 0.75f;
-		
 		float curAngle = Mathf.Atan(maxHeight / maxWidth);
 		for (int i = 0; i < numQuadrantVertices; i++)
 		{

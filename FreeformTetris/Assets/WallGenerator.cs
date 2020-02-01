@@ -7,9 +7,12 @@ public class WallGenerator : MonoBehaviour
     static Mesh mesh = null;
 
     MeshFilter mf;
+    public float totalWidth = 20;
     public float width = 5;
     public float height = 5;
     public float depth = 1;
+    public float minRadius = 0.25f;
+    public float maxRadius = 0.75f;
     public int numVertices = 16;
     public float checkDiameter = 0.1f;
 	
@@ -20,11 +23,11 @@ public class WallGenerator : MonoBehaviour
     {
         if (mesh == null)
         {
-            var holeVertices = HoleGeometry.Create(width, height, numVertices);
+            var holeVertices = HoleGeometry.Create(width, height, minRadius, maxRadius, numVertices);
             int numHoleVertices = holeVertices.Length;
 
-            var vertices = new Vector3[2 * numHoleVertices];
-            var triangles = new int[3 * 6 * numVertices];
+            var vertices = new Vector3[2 * numHoleVertices + 8];
+            var triangles = new int[3 * 6 * numVertices + 3 * 4];
             for (int i = 0; i < numHoleVertices; i += 2)
             {
                 int hv0 = i, hv1 = i + 1, hv2 = (i + 2) % numHoleVertices, hv3 = (i + 3) % numHoleVertices;
@@ -61,6 +64,31 @@ public class WallGenerator : MonoBehaviour
                 triangles[9 * i + 17] = v1;
             }
 
+            vertices[2 * numHoleVertices] = new Vector3(-totalWidth / 2.0f, height / 2.0f);
+            vertices[2 * numHoleVertices + 1] = new Vector3(-width / 2.0f, height / 2.0f);
+            vertices[2 * numHoleVertices + 2] = new Vector3(-width / 2.0f, -height / 2.0f);
+            vertices[2 * numHoleVertices + 3] = new Vector3(-totalWidth / 2.0f, -height / 2.0f);
+            vertices[2 * numHoleVertices + 4] = new Vector3(totalWidth / 2.0f, height / 2.0f);
+            vertices[2 * numHoleVertices + 5] = new Vector3(width / 2.0f, height / 2.0f);
+            vertices[2 * numHoleVertices + 6] = new Vector3(width / 2.0f, -height / 2.0f);
+            vertices[2 * numHoleVertices + 7] = new Vector3(totalWidth / 2.0f, -height / 2.0f);
+
+            triangles[3 * 6 * numVertices] = 2 * numHoleVertices;
+            triangles[3 * 6 * numVertices + 1] = 2 * numHoleVertices + 1;
+            triangles[3 * 6 * numVertices + 2] = 2 * numHoleVertices + 2;
+
+            triangles[3 * 6 * numVertices + 3] = 2 * numHoleVertices + 2;
+            triangles[3 * 6 * numVertices + 4] = 2 * numHoleVertices + 3;
+            triangles[3 * 6 * numVertices + 5] = 2 * numHoleVertices;
+
+            triangles[3 * 6 * numVertices + 6] = 2 * numHoleVertices + 4;
+            triangles[3 * 6 * numVertices + 7] = 2 * numHoleVertices + 6;
+            triangles[3 * 6 * numVertices + 8] = 2 * numHoleVertices + 5;
+
+            triangles[3 * 6 * numVertices + 9] = 2 * numHoleVertices + 6;
+            triangles[3 * 6 * numVertices + 10] = 2 * numHoleVertices + 4;
+            triangles[3 * 6 * numVertices + 11] = 2 * numHoleVertices + 7;
+
             mesh = new Mesh();
             mesh.vertices = vertices;
             mesh.triangles = triangles;
@@ -78,11 +106,18 @@ public class WallGenerator : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        var score = computeScore();
-        Debug.Log($"{score}");
+        //var score = computeScore();
+        //Debug.Log($"{score}");
     }
-	
-	float computeScore()
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+        Gizmos.DrawWireCube(new Vector3(0, 0, depth / 2), new Vector3(width, height, depth));
+        Gizmos.DrawWireCube(new Vector3(0, 0, depth / 2), new Vector3(totalWidth, height, depth));
+    }
+
+    float computeScore()
 	{
 		return computeCoverage("Objects") / holeCoverage;
 	}
