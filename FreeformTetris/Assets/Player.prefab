@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &695540762
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 695540763}
+  m_Layer: 10
+  m_Name: GrabPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &695540763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695540762}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.25, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7462931224679834031}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2210554175611410959
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +219,18 @@ MonoBehaviour:
     m_ActionId: d72d25d7-6291-4f4d-ba8b-bfc68fe02a1a
     m_ActionName: Player/Look
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 621207341}
+        m_MethodName: Grab
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 838119c8-9ef6-4085-8e3e-107ec4b542d9
     m_ActionName: Player/Fire
   - m_PersistentCalls:
@@ -271,6 +312,7 @@ MonoBehaviour:
   Controller: {fileID: 8244873403994694911}
   Camera: {fileID: 7462931224679834030}
   GroundCheckLocation: {fileID: 5314674673618492023}
+  GrabPoint: {fileID: 695540763}
   MoveSpeed: 5
   LookSensitivity: 3
   MaxPositiveVerticalLook: 80
@@ -279,8 +321,12 @@ MonoBehaviour:
   GroundCheckDistance: 0.4
   GroundMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2560
   JumpVelocity: 6
+  GrabRadius: 0.4
+  GrabMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1 &7462931224679834028
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,7 +354,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 695540763}
   m_Father: {fileID: 3805617409274576776}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

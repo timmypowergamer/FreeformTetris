@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private CharacterController Controller;
 	[SerializeField] private Camera Camera;
 	[SerializeField] private Transform GroundCheckLocation;
+	[SerializeField] private Transform GrabPoint;
 
 	[SerializeField] private float MoveSpeed = 5;
 	[SerializeField] private float LookSensitivity = 3;
@@ -37,6 +38,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private float GroundCheckDistance = 0.4f;
 	[SerializeField] private LayerMask GroundMask;
 	[SerializeField] private float JumpVelocity = 10f;
+	[SerializeField] private float GrabRadius = 0.4f;
+	[SerializeField] private LayerMask GrabMask;
 
 	//movement
 	private Vector2 MoveInputValue;
@@ -44,10 +47,14 @@ public class PlayerController : MonoBehaviour
 	private Vector2 lookRotation;
 	private Vector3 Velocity;
 	private bool jumpPressed = false;
+	private bool grabHeld = false;
+	private bool grabPressed = false;
 
 
 	private PlayerInput Input;
 	private Transform spawnPoint;
+
+	private Rigidbody heldObject;
 
 	private void OnEnable()
 	{
@@ -67,12 +74,30 @@ public class PlayerController : MonoBehaviour
 
 	public void Move(InputAction.CallbackContext context)
 	{
-		MoveInputValue = context.ReadValue<Vector2>();		
+		if(CurrentPlayerState == PlayerState.PLAYING)
+			MoveInputValue = context.ReadValue<Vector2>();		
 	}
 	
 	public void Look(InputAction.CallbackContext context)
 	{
-		LookInputValue = context.ReadValue<Vector2>();
+		if (CurrentPlayerState == PlayerState.PLAYING)
+			LookInputValue = context.ReadValue<Vector2>();
+	}
+
+	public void Grab(InputAction.CallbackContext context)
+	{
+		if (CurrentPlayerState == PlayerState.PLAYING)
+		{
+			grabPressed = context.phase == InputActionPhase.Performed;
+			if (!grabHeld && context.phase == InputActionPhase.Started)
+			{
+				grabHeld = true;
+			}
+			if (grabHeld && context.phase == InputActionPhase.Canceled)
+			{
+				grabHeld = false;
+			}
+		}
 	}
 
 	public void Ready(InputAction.CallbackContext context)
@@ -104,6 +129,7 @@ public class PlayerController : MonoBehaviour
 	public void Respawn()
 	{
 		CurrentPlayerState = PlayerState.PLAYING;
+		Velocity = Vector3.zero;
 		Controller.enabled = true;
 		Camera.enabled = true;
 		CurrentGroundState = GroundState.GROUNDED;
@@ -158,6 +184,39 @@ public class PlayerController : MonoBehaviour
 			}
 			Controller.Move(Velocity * Time.fixedDeltaTime);
 			jumpPressed = false;
+
+			if (heldObject == null && grabPressed)
+			{
+				RaycastHit hitInfo;
+				if (Physics.SphereCast(GrabPoint.position, GrabRadius, GrabPoint.forward, out hitInfo, 0.01f, GrabMask))
+				{
+					Grab(hitInfo.collider.attachedRigidbody);
+				}
+			}
+			else if (heldObject != null && !grabHeld)
+			{
+				ReleaseItem();
+			}
+			grabPressed = false;
+		}
+
+		
+	}
+
+	private void Grab(Rigidbody item)
+	{
+		heldObject = item;
+		heldObject.isKinematic = true;
+		heldObject.transform.parent = GrabPoint;
+		//heldObject.transform.localPosition = Vector3.zero;
+	}
+
+	private void ReleaseItem()
+	{
+		if(heldObject != null)
+		{
+			heldObject.isKinematic = false;
+			heldObject.transform.parent = null;
 		}
 	}
 
