@@ -20,7 +20,7 @@ public class PressAndHoldToSkip : MonoBehaviour
         if (Input.GetButton("Submit") == true)
         {
             timeHeld += Time.deltaTime;
-            if (timeHeld > 3)
+            if (timeHeld > 1)
             {
                 SceneManager.LoadScene(TitleScene);
             }
