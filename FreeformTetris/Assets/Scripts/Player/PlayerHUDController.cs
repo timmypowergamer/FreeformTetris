@@ -67,6 +67,11 @@ public class PlayerHUDController : MonoBehaviour
 		_notReadyInstructions.SetActive(!value);
 	}
 
+	public void GameStarting()
+	{
+		_readyIndicatorGroup.SetActive(false);
+	}
+
 	public void Spawned()
 	{
 		_readyIndicatorGroup.SetActive(false);
