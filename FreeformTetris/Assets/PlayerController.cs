@@ -124,6 +124,7 @@ public class PlayerController : MonoBehaviour
 			}
 			else if (CurrentPlayerState == PlayerState.WINNER)
 			{
+                AudioManager.Instance.RestartMusic();
 				SceneManager.LoadScene("TitleScene");
 			}
 			else if (CurrentPlayerState == PlayerState.PLAYING)
