@@ -121,6 +121,14 @@ public class WallGenerator : MonoBehaviour
             mesh.SetTriangles(triangles[1], 1);
             mesh.uv = uv;
             mesh.RecalculateNormals();
+
+            var normals = new Vector3[mesh.normals.Length];
+            mesh.normals.CopyTo(normals, 0);
+            for(var i = 0; i < numHoleVertices; i++)
+            {
+                normals[i] = new Vector3(0,0,-1);
+            }
+            mesh.normals = normals;
         }
 
         mf = GetComponent<MeshFilter>();
