@@ -29,6 +29,7 @@ public class WallGenerator : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
+		Scoreboard.gameObject.SetActive(false);
         var triggerVolume = GetComponent<Collider>();
         triggerVolume.bounds.size.Set(20, 5, 1);
         if (mesh == null)
@@ -160,6 +161,7 @@ public class WallGenerator : MonoBehaviour
 		{
 			newOwner.SetWall(this);
 		}
+		Scoreboard.gameObject.SetActive(Owner != null);
 	}
 
     public void SetColor(Color color)
