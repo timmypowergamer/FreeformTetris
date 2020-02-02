@@ -1,0 +1,67 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ObjectManager : MonoBehaviour
+{
+    public static ObjectManager Instance;
+
+    public GrabbableObject[] prefabs;
+    public int freeObjects;
+    const int max = 30;
+    float nextSpawn = 0.0f;
+    const float spawnTick = 1.0f;
+    bool running = false;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError($"Detected more than one ObjectManager in the scene! : {gameObject.name}");
+            return;
+        }
+        Instance = this;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStarted -= startRunning;
+    }
+
+    private void startRunning()
+    {
+        running = true;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        GameManager.Instance.OnGameStarted += startRunning;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Time.time > nextSpawn)
+        {
+            nextSpawn += spawnTick;
+            if(running)
+            {
+                if (freeObjects < max)
+                {
+                    spawnObject();
+                }
+            }
+        }
+    }
+
+    private void spawnObject()
+    {
+        var ind = Random.Range(0, prefabs.Length - 1);
+        var obj = GameObject.Instantiate(prefabs[ind], this.transform);
+        var scale = Random.Range(0.8f, 2.3f);
+        Debug.Log(scale);
+        obj.transform.localScale = new Vector3(scale, scale, scale);
+        freeObjects++;
+    }
+}

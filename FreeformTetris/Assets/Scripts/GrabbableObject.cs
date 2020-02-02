@@ -27,6 +27,15 @@ public class GrabbableObject : MonoBehaviour
 		}
 	}
 
+	private void Update()
+	{
+		if (RigidBody.transform.position.y < -3)
+		{
+			Destroy(this.gameObject);
+			ObjectManager.Instance.freeObjects--;
+		}
+	}
+
 	private void OnEnable()
 	{
 		RigidBody = GetComponent<Rigidbody>();
@@ -35,10 +44,12 @@ public class GrabbableObject : MonoBehaviour
 	public void Lock()
 	{
 		RigidBody.constraints = RigidbodyConstraints.FreezeAll;
+		ObjectManager.Instance.freeObjects--;
 	}
 
 	public void Unlock()
 	{
 		RigidBody.constraints = RigidbodyConstraints.None;
+		ObjectManager.Instance.freeObjects++;
 	}
 }
