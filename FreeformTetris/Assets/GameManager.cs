@@ -156,10 +156,10 @@ public class GameManager : MonoBehaviour
 
 	private async void GameRunningRoutine()
 	{
-		while (gameTimeRemaining > 0)
+		while (gameTimeRemaining > 0 && Application.isPlaying)
 		{
 			foreach(WallGenerator wall in _walls)
-			{
+			{				
 				wall.UpdateScoreboard();
 			}
 			await Task.Delay(1000);

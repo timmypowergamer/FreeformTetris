@@ -14673,6 +14673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a559f0b8bc5e6524086f480fa7c9a809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 0, g: 0, b: 0, a: 0}
   Scoreboard: {fileID: 7140074759353188250}
   DrawHitboxGizmos: 0
   IsWinningPlayer: 0
@@ -14704,7 +14705,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 9aa2c1123bfcd3543ac2afb4610065b9, type: 2}
-  - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: fa44c8dc6a0d4424a87bcc692530aa55, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
