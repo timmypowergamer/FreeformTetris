@@ -36,4 +36,9 @@ public class AudioManager : MonoBehaviour
     {
         
     }
+
+    public void EndMusic()
+    {
+        gameObject.GetComponentInChildren<AudioSource>()?.Stop();
+    }
 }
