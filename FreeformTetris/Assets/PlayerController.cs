@@ -261,14 +261,16 @@ public class PlayerController : MonoBehaviour
 
 	public void SetWall(WallGenerator wall)
 	{
+		Controller.enabled = false;
 		Input = GetComponent<PlayerInput>();
 		this.wall = wall;
 		var end = wall.GetComponentInChildren<EndSequence>();
 		cameraPos = Camera.transform.localPosition;
 		cameraRot = Camera.transform.localRotation;
 		spawnPoint = GameManager.Instance.GetSpawnPoint(Input);
-		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
+		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 		Camera.transform.position = end.cameraPoint.position;
 		Camera.transform.rotation = end.cameraPoint.rotation;
+		lookRotation.y = transform.rotation.eulerAngles.y;
 	}
 }
