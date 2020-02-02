@@ -24,6 +24,27 @@ public class PlayerHUDController : MonoBehaviour
 
 	[SerializeField] private Gradient _fillGradient;
 
+	[SerializeField] private TextMeshProUGUI loseTextMesh;
+	[SerializeField] private TextMeshProUGUI winTextMesh;
+
+	private string[] winText = {
+		"Nice Wall!",
+		"Good Enough!",
+		"You Did It!",
+		"Adequate Work!",
+	};
+
+	private string[] loseText =
+	{
+		"Try Harder",
+		"Maybe Next Time",
+		"Not Good Enough",
+		"Not Your Best Work",
+		"Weak!",
+		"Your Wall is a Source of Shame",
+		"You Participated!"
+	};
+
 	public void SetPlayerNum(int playerNum)
 	{
 		foreach(Image i in borders)
@@ -83,11 +104,13 @@ public class PlayerHUDController : MonoBehaviour
 
 	public void SetWinner()
 	{
+		winTextMesh.text = this.winText[Random.Range(0, this.winText.Length - 1)];
 		_winGroup.gameObject.SetActive(true);
 	}
 
 	public void SetLoser()
 	{
+		loseTextMesh.text = this.loseText[Random.Range(0, this.loseText.Length - 1)];
 		_loseGroup.gameObject.SetActive(true);
 	}
 }
