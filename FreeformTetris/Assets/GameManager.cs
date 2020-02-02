@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
 
 		PlayerHUDController hud = GetPlayerHUD(player);
 		_walls[player.playerIndex].SetOwner(player.GetComponent<PlayerController>());
+		_walls[player.playerIndex].SetColor(this.colors[player.playerIndex]);
 		hud.SetActive(true);
 		hud.SetPlayerNum(player.playerIndex);
 		hud.SetReady(false);
@@ -181,7 +182,7 @@ public class GameManager : MonoBehaviour
 				winner = wall;
 			}
 		}
-		if(_walls.Length > 1 || bestScore >= minimumSPWinThreshold) winner.IsWinningPlayer = true;
+		if(activePlayers.Count > 1 || bestScore >= minimumSPWinThreshold) winner.IsWinningPlayer = true;
 		OnGameFinished?.Invoke();
 	}
 }
