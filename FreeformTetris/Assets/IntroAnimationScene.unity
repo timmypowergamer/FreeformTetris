@@ -378,9 +378,9 @@ MonoBehaviour:
   - {fileID: 2800000, guid: f9f5bd3bdd4282541b75cbaa29641b18, type: 3}
   - {fileID: 2800000, guid: 1ae7bd5bef886aa40a92fe1f632aa42d, type: 3}
   - {fileID: 2800000, guid: 4dfc923ba082c6040b5ed7ed6d1c5cbb, type: 3}
-  - {fileID: 2800000, guid: cf22426947c33a845b58e2c80347a449, type: 3}
-  - {fileID: 2800000, guid: 92906dac1fea8614fb441e067b168936, type: 3}
-  - {fileID: 2800000, guid: 0283ab7535ede9748bc887c4ba87a8cb, type: 3}
+  - {fileID: 2800000, guid: da5dd221f3c397946afde707ca6067ba, type: 3}
+  - {fileID: 2800000, guid: 97c7907c65c85404e8d3d19ba62fa1e2, type: 3}
+  - {fileID: 2800000, guid: e0226966e0dd7b9469e48f303c47d6fe, type: 3}
   - {fileID: 2800000, guid: cd2ebe42a4fdd3345b3374cd4b9ec260, type: 3}
   - {fileID: 2800000, guid: b6925117f3eed104dbc557fe6583efe8, type: 3}
   - {fileID: 2800000, guid: 440fb55867f865541b37aaad981d0646, type: 3}
@@ -390,29 +390,52 @@ MonoBehaviour:
   - {fileID: 2800000, guid: fea836da515effe4b88e20d53b4dd946, type: 3}
   - {fileID: 2800000, guid: 7df986d4bd9c5254d89b02bdffadfdc9, type: 3}
   - {fileID: 2800000, guid: 1c1c45682d28e6647bf6be9fe3042e2a, type: 3}
-  - {fileID: 2800000, guid: 61c8cccadff87b247854ee2999f83adb, type: 3}
-  - {fileID: 2800000, guid: a507fd0f8744a424fa679041d8d40db2, type: 3}
+  - {fileID: 2800000, guid: c85bd518dd9007646a26daf3e724dbf5, type: 3}
+  - {fileID: 2800000, guid: 2fd2f805684bab7448bfa1e24d781a58, type: 3}
   - {fileID: 2800000, guid: 55400c726f05e4f48b399b7773e298b7, type: 3}
+  altslides:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 2800000, guid: cec80fb0a9d6290439b11761fa01d754, type: 3}
+  - {fileID: 0}
+  - {fileID: 2800000, guid: 546a9c4d705f70f45855238ae4523ff9, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 2800000, guid: 8632127e407f3c248a3d85e72ac20b17, type: 3}
+  - {fileID: 2800000, guid: bd01f4484999dee4a8b7a79d7d4efef8, type: 3}
+  - {fileID: 0}
   changeTime:
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
   - 4
   - 4
+  - 4
+  useAlt: 0000000001000100000000000000000001010000
+  currentSlide: 1
   slidecanvas: {fileID: 992561986}
 --- !u!114 &509147898
 MonoBehaviour:
