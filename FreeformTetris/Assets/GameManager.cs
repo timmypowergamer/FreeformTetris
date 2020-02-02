@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private GameObject p3_camera;
 	[SerializeField] private TextMeshProUGUI _countdownText;
 	[SerializeField] private Transform _endHudParent;
+    [SerializeField] private AudioSource ZapSource;
 
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
@@ -224,4 +225,9 @@ public class GameManager : MonoBehaviour
 			}
 		}
 	}
+
+    public void PlayZap()
+    {
+        ZapSource.Play();
+    }
 }
