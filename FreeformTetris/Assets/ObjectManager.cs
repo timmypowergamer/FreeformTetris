@@ -23,20 +23,19 @@ public class ObjectManager : MonoBehaviour
         Instance = this;
     }
 
-    private void OnDisable()
+	private void OnEnable()
+	{
+		GameManager.OnGameStarted += startRunning;
+	}
+
+	private void OnDisable()
     {
-        GameManager.Instance.OnGameStarted -= startRunning;
+        GameManager.OnGameStarted -= startRunning;
     }
 
     private void startRunning()
     {
         running = true;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        GameManager.Instance.OnGameStarted += startRunning;
     }
 
     // Update is called once per frame
@@ -60,7 +59,7 @@ public class ObjectManager : MonoBehaviour
         var ind = Random.Range(0, prefabs.Length - 1);
         var obj = GameObject.Instantiate(prefabs[ind], this.transform);
         var scale = Random.Range(0.8f, 2.3f);
-        Debug.Log(scale);
+        //Debug.Log(scale);
         obj.transform.localScale = new Vector3(scale, scale, scale);
         freeObjects++;
     }

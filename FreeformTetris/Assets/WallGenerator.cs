@@ -22,6 +22,9 @@ public class WallGenerator : MonoBehaviour
 	[SerializeField] private ScoreboardScript Scoreboard;
 	[SerializeField] private bool DrawHitboxGizmos;
 
+	public bool IsWinningPlayer = false;
+	public PlayerController Owner;
+
     // Start is called before the first frame update
     async void Start()
     {
@@ -141,6 +144,15 @@ public class WallGenerator : MonoBehaviour
 		Scoreboard.score = Mathf.RoundToInt(lastComputedScore * 100f);
 	}
 
+	public void SetOwner(PlayerController newOwner)
+	{
+		Owner = newOwner;
+		if (newOwner != null)
+		{
+			newOwner.SetWall(this);
+		}
+	}
+
     float computeScore()
 	{
 		return computeCoverage("Objects", false);
@@ -195,4 +207,9 @@ public class WallGenerator : MonoBehaviour
             }
         }
     }
+
+	public float GetScore()
+	{
+		return lastComputedScore;
+	}
 }

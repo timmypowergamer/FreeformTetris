@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -13,7 +14,8 @@ public class PlayerController : MonoBehaviour
 		READY,
 		SPAWNING,
 		PLAYING,
-		PODIUM
+		PODIUM,
+		WINNER
 	}
 
 	public enum GroundState
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private float JumpVelocity = 10f;
 
 	private PlayerHUDController HUD;
+	private WallGenerator wall;
 
 	//movement
 	private Vector2 MoveInputValue;
@@ -52,10 +55,8 @@ public class PlayerController : MonoBehaviour
 	private bool grabPressed = false;
 
 
-	private PlayerInput Input;
+	public PlayerInput Input { get; private set; }
 	private Transform spawnPoint;
-
-	private Rigidbody heldObject;
 
     private Animator animator;
 
@@ -64,7 +65,9 @@ public class PlayerController : MonoBehaviour
 		Input = GetComponent<PlayerInput>();
         animator = GetComponentInChildren<Animator>();
 		spawnPoint = GameManager.Instance.GetSpawnPoint(Input);
-		GameManager.Instance.OnGameStarted += OnGameStart;
+		GameManager.OnGameStarted += OnGameStart;
+		GameManager.OnGameFinished += OnGameFinished;
+
 		CurrentPlayerState = PlayerState.JOINED;
 		Controller.enabled = false;
 		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
@@ -76,7 +79,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
 	{
-		GameManager.Instance.OnGameStarted -= OnGameStart;
+		GameManager.OnGameStarted -= OnGameStart;
+		GameManager.OnGameFinished -= OnGameFinished;
 	}
 
 	public void Move(InputAction.CallbackContext context)
@@ -117,6 +121,10 @@ public class PlayerController : MonoBehaviour
 				GameManager.Instance.ToggleReady(Input);
 				HUD.SetReady(true);
 			}
+			else if (CurrentPlayerState == PlayerState.WINNER)
+			{
+				SceneManager.LoadScene("TitleScene");
+			}
 			else if (CurrentPlayerState == PlayerState.PLAYING)
 			{
 				jumpPressed = true;
@@ -126,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
 	public void Leave(InputAction.CallbackContext context)
 	{
-		Debug.Log("ready");
+		//Debug.Log("ready");
 		if (context.phase == InputActionPhase.Performed)
 		{
 			if(CurrentPlayerState == PlayerState.JOINED)
@@ -145,6 +153,15 @@ public class PlayerController : MonoBehaviour
 	public void OnGameStart()
 	{
 		Respawn();		
+	}
+
+	public void OnGameFinished()
+	{
+		CurrentPlayerState = PlayerState.PODIUM;
+		Velocity = Vector3.zero;
+		Controller.enabled = false;
+		HUD.GameOver(wall.GetScore());
+		animator.gameObject.SetActive(false);
 	}
 
 	public void Respawn()
@@ -214,33 +231,29 @@ public class PlayerController : MonoBehaviour
 			grabPressed = false;
 
             animator.SetFloat("Forward", MoveInputValue.y);
-		}
-
-		
+		}		
 	}
 
-	private void Grab(Rigidbody item)
+	public void SetWinningState(bool youActuallyLost)
 	{
-		if (item != null)
+		CurrentPlayerState = PlayerState.WINNER;
+		if (youActuallyLost)
 		{
-			heldObject = item;
-			//heldObject.isKinematic = true;
-			//heldObject.transform.parent = GrabPoint.transform;
-			//heldObject.transform.localPosition = Vector3.zero;
-			GrabPoint.Grab();
-			Debug.Log($"Item {item.name} + grabbed");
+			HUD.SetLoser();
+		}
+		else
+		{
+			HUD.SetWinner();
 		}
 	}
 
-	private void ReleaseItem()
+	public Camera GetCamera()
 	{
-		if(heldObject != null)
-		{
-			//heldObject.isKinematic = false;
-			//heldObject.transform.parent = null;
-			Debug.Log($"Item {heldObject.name} + released");
-			heldObject = null;
-		}
+		return Camera;
 	}
 
+	public void SetWall(WallGenerator wall)
+	{
+		this.wall = wall;
+	}
 }

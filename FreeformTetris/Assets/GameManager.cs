@@ -10,8 +10,9 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance;
 
-	public delegate void GameStartEvent();
-	public GameStartEvent OnGameStarted;
+	public delegate void GameEvent();
+	public static GameEvent OnGameStarted;
+	public static GameEvent OnGameFinished;
 
 
 
@@ -24,12 +25,17 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private GameObject _timerObject;
 	[SerializeField] private TextMeshProUGUI _timerText;
 	[SerializeField] private WallGenerator[] _walls;
+	[SerializeField] private float minimumSPWinThreshold = 0.5f;
 
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
 
 	private int gameTimeRemaining;
 	private DateTime gameTimeStart;
+
+	private bool GameHasBeenStarted = false;
+
+	public int NumPlayers { get { return activePlayers.Count; } }
 
 	private TimeSpan TimeRemaining { get { return new TimeSpan(0, 0, gameTimeRemaining); } }
 
@@ -56,6 +62,7 @@ public class GameManager : MonoBehaviour
 		}
 
 		PlayerHUDController hud = GetPlayerHUD(player);
+		_walls[player.playerIndex].SetOwner(player.GetComponent<PlayerController>());
 		hud.SetActive(true);
 		hud.SetPlayerNum(player.playerIndex);
 		hud.SetReady(false);
@@ -69,7 +76,9 @@ public class GameManager : MonoBehaviour
 			activePlayers.Remove(player);
 			var hud = GetPlayerHUD(player);
 			if (hud != null) hud.SetActive(false);
+			_walls[player.playerIndex].SetOwner(null);
 			Debug.Log($"Player {player.playerIndex} left");
+			if (GameHasBeenStarted) return;
 			if (activePlayers.Count < PlayerInputManager.instance.playerCount && !PlayerInputManager.instance.joiningEnabled)
 			{
 				PlayerInputManager.instance.EnableJoining();
@@ -139,6 +148,7 @@ public class GameManager : MonoBehaviour
 		gameTimeStart = DateTime.Now;
 		Debug.Log("Game has started!");
 		_timerObject.SetActive(true);
+		GameHasBeenStarted = true;
 		OnGameStarted?.Invoke();
 		GameRunningRoutine();
 	}
@@ -155,10 +165,23 @@ public class GameManager : MonoBehaviour
 			gameTimeRemaining--;
 			_timerText.text = TimeRemaining.ToString(@"mm\:ss");
 		}
+		GameEnded();
 	}
 
-	public void UpdateScore()
+	private void GameEnded()
 	{
-
+		WallGenerator winner = null;
+		float bestScore = -1;
+		foreach(WallGenerator wall in _walls)
+		{
+			float score = wall.GetScore();
+			if(score > bestScore)
+			{
+				bestScore = score;
+				winner = wall;
+			}
+		}
+		if(_walls.Length > 1 || bestScore >= minimumSPWinThreshold) winner.IsWinningPlayer = true;
+		OnGameFinished?.Invoke();
 	}
 }
