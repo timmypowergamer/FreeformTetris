@@ -21,6 +21,8 @@ public class WallGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        var triggerVolume = GetComponent<Collider>();
+        triggerVolume.bounds.size.Set(20, 5, 1);
         if (mesh == null)
         {
             var holeVertices = HoleGeometry.Create(width, height, minRadius, maxRadius, numVertices);
@@ -125,6 +127,20 @@ public class WallGenerator : MonoBehaviour
     {
         //var score = computeScore();
         //Debug.Log($"{score}");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var component = other.GetComponentInParent<GrabbableObject>();
+        if(component == null) { return; }
+        component.Placed = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        var component = other.GetComponentInParent<GrabbableObject>();
+        if (component == null) { return; }
+        component.Placed = false;
     }
 
     private void OnDrawGizmos()
