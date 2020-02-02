@@ -444,7 +444,7 @@ MonoBehaviour:
   - 4
   - 6
   useAlt: 00000000000100010000000100000000000000010100
-  currentSlide: 11
+  currentSlide: 1
   slidecanvas: {fileID: 992561986}
 --- !u!114 &509147898
 MonoBehaviour:
