@@ -17,6 +17,11 @@ public class ImageCycle : MonoBehaviour
     private float timeSinceAlt = 0.0f;
     private float altTime = 1.0f;
     public RawImage slidecanvas;
+    public AudioClip blast;
+    public AudioClip crash;
+    public AudioClip thud;
+    public AudioClip sciFi;
+    public AudioClip flying;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,11 +34,19 @@ public class ImageCycle : MonoBehaviour
         if (timeSinceLast > changeTime[currentSlide] && currentSlide < slides.Length)
         {
             slidecanvas.texture = slides[currentSlide];
+            if (currentSlide == 3) SoundManager.instance.playSingle(crash);
+            if (currentSlide == 5) SoundManager.instance.playSingle(flying);
+            if (currentSlide == 6) SoundManager.instance.playSingle(thud);
+            if (currentSlide == 18) SoundManager.instance.playSingle(blast);
+            if (currentSlide == 19) SoundManager.instance.playSingle(sciFi);
             timeSinceLast = 0.0f;
             currentSlide++;
         }
 
-        
+       // if (currentSlide == 1)
+       //     slidecanvas.color = new Color32(255, 255, 255, 100)
+
+
         if (useAlt[currentSlide-1] == true)
         {
             if (usingAlt == false && timeSinceAlt > altTime)
