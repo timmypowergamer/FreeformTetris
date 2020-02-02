@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private WallGenerator[] _walls;
 	[SerializeField] private float minimumSPWinThreshold = 0.5f;
     [SerializeField] private AudioSource GameAudio;
+    [SerializeField] private AudioSource ZapSource;
 
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
@@ -188,4 +189,9 @@ public class GameManager : MonoBehaviour
 		if(activePlayers.Count > 1 || bestScore >= minimumSPWinThreshold) winner.IsWinningPlayer = true;
 		OnGameFinished?.Invoke();
 	}
+
+    public void PlayZap()
+    {
+        ZapSource.Play();
+    }
 }
