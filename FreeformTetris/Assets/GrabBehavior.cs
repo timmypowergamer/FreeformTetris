@@ -43,6 +43,13 @@ public class GrabBehavior : MonoBehaviour
 			if (Physics.Raycast(transform.position, transform.forward, out hit, GrabDistance, mask))
 			{
 				grabbedItem = hit.rigidbody;
+
+				var grabbedObject = grabbedItem.GetComponent<GrabbableObject>();
+				if (grabbedObject != null && grabbedObject.Placed)
+				{
+					grabbedObject.Unlock();
+				}
+
 				previousDrag = grabbedItem.drag;
 				previousAngularDrag = grabbedItem.angularDrag;
 				grabbedItem.angularDrag = GrabAngularDrag;
@@ -68,6 +75,13 @@ public class GrabBehavior : MonoBehaviour
 			grabbedItem.drag = previousDrag;
 			grabbedItem.angularDrag = previousAngularDrag;
 			if(joint != null) Destroy(joint);
+
+			var grabbedObject = grabbedItem.GetComponent<GrabbableObject>();
+			if (grabbedObject != null && grabbedObject.Placed)
+			{
+				grabbedObject.Lock();
+			}
+
 			grabbedItem = null;
 		}
 	}

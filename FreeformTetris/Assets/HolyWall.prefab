@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8116921680212671920}
   - component: {fileID: 1567938490373106081}
   - component: {fileID: 5024193190085997485}
+  - component: {fileID: 618094747164148766}
   m_Layer: 0
   m_Name: HolyWall
   m_TagString: Untagged
@@ -46,9 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a559f0b8bc5e6524086f480fa7c9a809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  totalWidth: 20
   width: 5
   height: 5
   depth: 1
+  minRadius: 0.25
+  maxRadius: 0.75
   numVertices: 16
   checkDiameter: 0.1
 --- !u!33 &8116921680212671920
@@ -112,3 +116,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!65 &618094747164148766
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8143614390736869034}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 20, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0.5}
