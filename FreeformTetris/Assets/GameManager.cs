@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Threading.Tasks;
 using System;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,10 +13,16 @@ public class GameManager : MonoBehaviour
 	public delegate void GameStartEvent();
 	public GameStartEvent OnGameStarted;
 
+
+
 	[SerializeField] private List<Transform> SpawnPoints;
 	[SerializeField] private int MinimimPlayerCount = 2;
 	[SerializeField] private PlayerHUDController _playerHUDPrefab;
 	[SerializeField] private int MatchLength = 90;
+	[SerializeField] private Transform _hudParent;
+	[SerializeField] public Color[] colors;
+	[SerializeField] private GameObject _timerObject;
+	[SerializeField] private TextMeshProUGUI _timerText;
 
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
@@ -25,7 +32,7 @@ public class GameManager : MonoBehaviour
 
 	private TimeSpan TimeRemaining { get { return new TimeSpan(0, 0, gameTimeRemaining); } }
 
-	private Dictionary<PlayerInput, PlayerHUDController> playerHUDs = new Dictionary<PlayerInput, PlayerHUDController>();
+	[SerializeField] private List<PlayerHUDController> playerHUDs = new List<PlayerHUDController>();
 
 	private void Awake()
 	{
@@ -35,6 +42,7 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 		Instance = this;
+		_timerObject.SetActive(false);
 	}
 
 	public void PlayerJoined(PlayerInput player)
@@ -46,10 +54,10 @@ public class GameManager : MonoBehaviour
 			PlayerInputManager.instance.DisableJoining();
 		}
 
-		PlayerHUDController hud = Instantiate(_playerHUDPrefab);
+		PlayerHUDController hud = GetPlayerHUD(player);
+		hud.SetActive(true);
 		hud.SetPlayerNum(player.playerIndex);
 		hud.SetReady(false);
-		playerHUDs.Add(player, hud);
 	}
 
 	public void PlayerLeft(PlayerInput player)
@@ -58,6 +66,8 @@ public class GameManager : MonoBehaviour
 		{
 			if (readyPlayers.Contains(player)) ToggleReady(player);
 			activePlayers.Remove(player);
+			var hud = GetPlayerHUD(player);
+			if (hud != null) hud.SetActive(false);
 			Debug.Log($"Player {player.playerIndex} left");
 			if (activePlayers.Count < PlayerInputManager.instance.playerCount && !PlayerInputManager.instance.joiningEnabled)
 			{
@@ -103,9 +113,9 @@ public class GameManager : MonoBehaviour
 
 	public PlayerHUDController GetPlayerHUD(PlayerInput player)
 	{
-		if(playerHUDs.ContainsKey(player))
+		if(playerHUDs.Count > player.playerIndex)
 		{
-			return playerHUDs[player];
+			return playerHUDs[player.playerIndex];
 		}
 		return null;
 	}
@@ -127,12 +137,19 @@ public class GameManager : MonoBehaviour
 		gameTimeRemaining = MatchLength;
 		gameTimeStart = DateTime.Now;
 		Debug.Log("Game has started!");
+		_timerObject.SetActive(true);
 		OnGameStarted?.Invoke();
+		GameRunningRoutine();
 	}
 
 	private async void GameRunningRoutine()
 	{
-		//while (gam)
+		while (gameTimeRemaining > 0)
+		{
+			await Task.Delay(1000);
+			gameTimeRemaining--;
+			_timerText.text = TimeRemaining.ToString(@"mm\:ss");
+		}
 	}
 
 	public void UpdateScore()

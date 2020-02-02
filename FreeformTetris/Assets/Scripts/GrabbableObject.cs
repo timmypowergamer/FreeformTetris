@@ -5,7 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class GrabbableObject : MonoBehaviour
 {
-	public Rigidbody RigidBody { get; private set; } 
+	public Rigidbody RigidBody { get; private set; }
+	public bool Placed = false;
 
 	private void Reset()
 	{
@@ -24,5 +25,31 @@ public class GrabbableObject : MonoBehaviour
 				collider.convex = true;
 			}
 		}
+	}
+
+	private void Update()
+	{
+		if (RigidBody.transform.position.y < -3)
+		{
+			Destroy(this.gameObject);
+			ObjectManager.Instance.freeObjects--;
+		}
+	}
+
+	private void OnEnable()
+	{
+		RigidBody = GetComponent<Rigidbody>();
+	}
+
+	public void Lock()
+	{
+		RigidBody.constraints = RigidbodyConstraints.FreezeAll;
+		ObjectManager.Instance.freeObjects--;
+	}
+
+	public void Unlock()
+	{
+		RigidBody.constraints = RigidbodyConstraints.None;
+		ObjectManager.Instance.freeObjects++;
 	}
 }

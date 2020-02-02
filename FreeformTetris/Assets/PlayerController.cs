@@ -57,9 +57,12 @@ public class PlayerController : MonoBehaviour
 
 	private Rigidbody heldObject;
 
+    private Animator animator;
+
 	private void OnEnable()
 	{
 		Input = GetComponent<PlayerInput>();
+        animator = GetComponentInChildren<Animator>();
 		spawnPoint = GameManager.Instance.GetSpawnPoint(Input);
 		GameManager.Instance.OnGameStarted += OnGameStart;
 		CurrentPlayerState = PlayerState.JOINED;
@@ -67,9 +70,11 @@ public class PlayerController : MonoBehaviour
 		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
 		Camera.enabled = false;
 		HUD = GameManager.Instance.GetPlayerHUD(Input);
-	}
+		HUD.SetReady(false);
+        animator.SetFloat("Forward", 0);
+    }
 
-	private void OnDisable()
+    private void OnDisable()
 	{
 		GameManager.Instance.OnGameStarted -= OnGameStart;
 	}
@@ -112,12 +117,6 @@ public class PlayerController : MonoBehaviour
 				GameManager.Instance.ToggleReady(Input);
 				HUD.SetReady(true);
 			}
-			else if (CurrentPlayerState == PlayerState.READY)
-			{
-				CurrentPlayerState = PlayerState.JOINED;
-				GameManager.Instance.ToggleReady(Input);
-				HUD.SetReady(false);
-			}
 			else if (CurrentPlayerState == PlayerState.PLAYING)
 			{
 				jumpPressed = true;
@@ -127,11 +126,18 @@ public class PlayerController : MonoBehaviour
 
 	public void Leave(InputAction.CallbackContext context)
 	{
-		if(context.phase == InputActionPhase.Performed)
+		Debug.Log("ready");
+		if (context.phase == InputActionPhase.Performed)
 		{
 			if(CurrentPlayerState == PlayerState.JOINED)
 			{				
 				Destroy(gameObject);
+			}
+			else if (CurrentPlayerState == PlayerState.READY)
+			{
+				CurrentPlayerState = PlayerState.JOINED;
+				GameManager.Instance.ToggleReady(Input);
+				HUD.SetReady(false);
 			}
 		}
 	}
@@ -149,9 +155,9 @@ public class PlayerController : MonoBehaviour
 		Controller.enabled = true;
 		Camera.enabled = true;
 		CurrentGroundState = GroundState.GROUNDED;
-	}
+    }
 
-	private void FixedUpdate()
+    private void FixedUpdate()
 	{
 		if (CurrentPlayerState == PlayerState.PLAYING)
 		{
@@ -206,6 +212,8 @@ public class PlayerController : MonoBehaviour
 				GrabPoint.Release();
 			}
 			grabPressed = false;
+
+            animator.SetFloat("Forward", MoveInputValue.y);
 		}
 
 		
