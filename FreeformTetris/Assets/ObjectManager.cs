@@ -61,7 +61,7 @@ public class ObjectManager : MonoBehaviour
     private void spawnObject()
     {
 		//Vector3 spawnLoc = Random.insideUnitCircle * spawnradius;
-        var ind = Random.Range(0, prefabs.Length - 1);
+        var ind = Random.Range(0, prefabs.Length);
         var obj = GameObject.Instantiate(prefabs[ind], Vector3.zero, Random.rotation, this.transform);
 		obj.transform.localPosition = Vector3.zero;
         var scale = Random.Range(0.9f, 1.5f);

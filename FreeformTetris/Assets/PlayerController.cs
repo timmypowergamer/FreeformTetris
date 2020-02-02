@@ -271,5 +271,6 @@ public class PlayerController : MonoBehaviour
 		Camera.transform.position = end.cameraPoint.position;
 		Camera.transform.rotation = end.cameraPoint.rotation;
 		lookRotation.y = transform.rotation.eulerAngles.y;
+		GrabPoint.SetColor(Input.playerIndex);
 	}
 }

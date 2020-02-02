@@ -114,13 +114,13 @@ public class PlayerHUDController : MonoBehaviour
 
 	public void SetWinner()
 	{
-		winTextMesh.text = this.winText[Random.Range(0, this.winText.Length - 1)];
+		winTextMesh.text = this.winText[Random.Range(0, this.winText.Length)];
 		_winGroup.gameObject.SetActive(true);
 	}
 
 	public void SetLoser()
 	{
-		loseTextMesh.text = this.loseText[Random.Range(0, this.loseText.Length - 1)];
+		loseTextMesh.text = this.loseText[Random.Range(0, this.loseText.Length)];
 		_loseGroup.gameObject.SetActive(true);
 	}
 }

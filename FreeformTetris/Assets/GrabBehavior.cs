@@ -24,15 +24,32 @@ public class GrabBehavior : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		RaycastHit hit;
-		if (Physics.Raycast(transform.position, transform.forward, out hit, GrabDistance, mask))
+		if (!IsGrabbing)
 		{
-			crosshair.transform.position = hit.point;
+			RaycastHit hit;
+			if (Physics.Raycast(transform.position, transform.forward, out hit, GrabDistance, mask))
+			{
+				crosshair.gameObject.SetActive(true);
+				crosshair.transform.position = hit.point;
+			}
+			else
+			{
+				crosshair.transform.localPosition = Vector3.zero;
+				crosshair.gameObject.SetActive(false);
+			}
 		}
 		else
 		{
 			crosshair.transform.localPosition = Vector3.zero;
+			crosshair.gameObject.SetActive(false);
 		}
+	}
+
+	public void SetColor(int playernum)
+	{
+		Color c = GameManager.Instance.colors[playernum];
+		c.a = 0.5f;
+		crosshair.GetComponent<MeshRenderer>().material.color = c;
 	}
 
 	public void Grab()
