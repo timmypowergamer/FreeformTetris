@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
 
+	private Coroutine startRoutine;
+
 	private int gameTimeRemaining;
 	private DateTime gameTimeStart;
 
@@ -98,7 +100,12 @@ public class GameManager : MonoBehaviour
 			}
 			if (readyPlayers.Count == activePlayers.Count && readyPlayers.Count >= MinimimPlayerCount)
 			{
-				StartGame();
+				startRoutine = StartCoroutine(StartGame());
+			}
+			else if(startRoutine != null)
+			{
+				StopCoroutine(startRoutine);
+				_countdownText.transform.parent.gameObject.SetActive(false);
 			}
 			p3_camera.SetActive(activePlayers.Count > 0);
 		}
@@ -114,7 +121,7 @@ public class GameManager : MonoBehaviour
 				Debug.Log($"Player {player.playerIndex} is ready");
 				if(readyPlayers.Count == activePlayers.Count && readyPlayers.Count >= MinimimPlayerCount)
 				{
-					StartGame();
+					startRoutine = StartCoroutine(StartGame());
 				}
 			}
 			else
@@ -122,6 +129,10 @@ public class GameManager : MonoBehaviour
 				readyPlayers.Remove(player);
 				Debug.Log($"Player {player.playerIndex} is not ready");
 				_countdownText.transform.parent.gameObject.SetActive(false);
+				if (startRoutine != null)
+				{
+					StopCoroutine(startRoutine);
+				}
 			}
 		}
 	}
@@ -145,25 +156,29 @@ public class GameManager : MonoBehaviour
 		return null;
 	}
 
-	private async void StartGame()
+	private IEnumerator StartGame()
 	{
-		if (readyPlayers.Count != activePlayers.Count) return;
+		if (readyPlayers.Count != activePlayers.Count) yield break;
 
 		OnGameStarting?.Invoke();
 
+		int countdown = 3;
+		float timer = 1;
+
 		_countdownText.transform.parent.gameObject.SetActive(true);
-		Debug.Log("Starting in 3...");
-		_countdownText.text = "3";
-		await Task.Delay(1000);
-		if (readyPlayers.Count != activePlayers.Count) return;
-		_countdownText.text = "2";
-		Debug.Log("2...");
-		await Task.Delay(1000);
-		if (readyPlayers.Count != activePlayers.Count) return;
-		_countdownText.text = "1";
-		Debug.Log("1...");
-		await Task.Delay(1000);
-		if (readyPlayers.Count != activePlayers.Count) return;
+		while (countdown > 0)
+		{
+			timer = 1;
+			Debug.Log($"Starting in {countdown}...");
+			_countdownText.text = countdown.ToString();
+			while(timer > 0)
+			{
+				yield return null;
+				timer -= Time.deltaTime;
+			}
+			countdown--;
+			if (activePlayers.Count != readyPlayers.Count) yield break;
+		}
 
 		_countdownText.text = "START!";
 		gameTimeRemaining = MatchLength;
@@ -175,7 +190,12 @@ public class GameManager : MonoBehaviour
         GameAudio?.Play();
 		OnGameStarted?.Invoke();
 		GameRunningRoutine();
-		await Task.Delay(2000);
+		timer = 1f;
+		while (timer > 0)
+		{
+			yield return null;
+			timer -= Time.deltaTime;
+		}
 		_countdownText.transform.parent.gameObject.SetActive(false);
 	}
 

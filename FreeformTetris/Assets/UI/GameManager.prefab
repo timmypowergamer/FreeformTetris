@@ -57,8 +57,8 @@ MonoBehaviour:
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
 --- !u!1 &834961048
@@ -907,7 +907,7 @@ MonoBehaviour:
   MinimimPlayerCount: 1
   _playerHUDPrefab: {fileID: 5140489600508651320, guid: f674550a97fa7e7469de3205a4216bf7,
     type: 3}
-  MatchLength: 15
+  MatchLength: 90
   _hudParent: {fileID: 1043636237}
   _hud34Parent: {fileID: 834961049}
   colors:
@@ -927,6 +927,7 @@ MonoBehaviour:
   p3_camera: {fileID: 0}
   _countdownText: {fileID: 901058198564926251}
   _endHudParent: {fileID: 354380910}
+  ZapSource: {fileID: 0}
   playerHUDs:
   - {fileID: 8297496817964093521}
   - {fileID: 8297496817002264277}

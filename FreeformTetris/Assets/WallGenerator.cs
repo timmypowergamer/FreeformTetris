@@ -161,7 +161,10 @@ public class WallGenerator : MonoBehaviour
 		{
 			newOwner.SetWall(this);
 		}
-		Scoreboard.gameObject.SetActive(Owner != null);
+		if (Scoreboard != null)
+		{
+			Scoreboard.gameObject.SetActive(Owner != null);
+		}
 	}
 
     public void SetColor(Color color)
