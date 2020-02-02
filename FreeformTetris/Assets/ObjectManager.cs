@@ -58,8 +58,8 @@ public class ObjectManager : MonoBehaviour
     {
         var ind = Random.Range(0, prefabs.Length - 1);
         var obj = GameObject.Instantiate(prefabs[ind], this.transform);
-        var scale = Random.Range(0.8f, 2.3f);
-        //Debug.Log(scale);
+        var scale = Random.Range(0.9f, 1.5f);
+        scale = Mathf.Pow(scale, 2);
         obj.transform.localScale = new Vector3(scale, scale, scale);
         freeObjects++;
     }
