@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private TextMeshProUGUI _timerText;
 	[SerializeField] private WallGenerator[] _walls;
 	[SerializeField] private float minimumSPWinThreshold = 0.5f;
+    [SerializeField] private AudioSource GameAudio;
 
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
@@ -150,6 +151,8 @@ public class GameManager : MonoBehaviour
 		Debug.Log("Game has started!");
 		_timerObject.SetActive(true);
 		GameHasBeenStarted = true;
+        AudioManager.Instance?.EndMusic();
+        GameAudio?.Play();
 		OnGameStarted?.Invoke();
 		GameRunningRoutine();
 	}
