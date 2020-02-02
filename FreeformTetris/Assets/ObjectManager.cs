@@ -7,10 +7,11 @@ public class ObjectManager : MonoBehaviour
     public static ObjectManager Instance;
 
     public GrabbableObject[] prefabs;
-    const int max = 30;
+    const int max = 100;
     float nextSpawn = 0.0f;
-    const float spawnTick = 1.0f;
+    const float spawnTick = 0.65f;
     bool running = false;
+	//float spawnradius = 4f;
 
 	List<GrabbableObject> spawnedObjects = new List<GrabbableObject>();
 
@@ -59,8 +60,10 @@ public class ObjectManager : MonoBehaviour
 
     private void spawnObject()
     {
+		//Vector3 spawnLoc = Random.insideUnitCircle * spawnradius;
         var ind = Random.Range(0, prefabs.Length - 1);
-        var obj = GameObject.Instantiate(prefabs[ind], this.transform);
+        var obj = GameObject.Instantiate(prefabs[ind], Vector3.zero, Random.rotation, this.transform);
+		obj.transform.localPosition = Vector3.zero;
         var scale = Random.Range(0.9f, 1.5f);
         scale = Mathf.Pow(scale, 2);
         obj.transform.localScale = new Vector3(scale, scale, scale);

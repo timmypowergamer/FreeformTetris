@@ -39,6 +39,7 @@ public class ObjectDetector : MonoBehaviour
 		EndSequencePlaying = true;
 		foreach(GrabbableObject obj in objectsInside)
 		{
+			if (obj == null) continue;
 			obj.RigidBody.constraints = RigidbodyConstraints.None;
 			SpringJoint fixie = obj.gameObject.AddComponent<SpringJoint>();
 			fixie.anchor = Vector3.zero;
@@ -59,6 +60,7 @@ public class ObjectDetector : MonoBehaviour
 		{
 			foreach (GrabbableObject obj in objectsInside)
 			{
+				if (obj == null) continue;
 				SpringJoint fixie = obj.gameObject.GetComponent<SpringJoint>();
 				Destroy(fixie);
 				obj.transform.SetLayerRecursively("ObjectInteraction");
@@ -68,6 +70,7 @@ public class ObjectDetector : MonoBehaviour
 		{
 			foreach (GrabbableObject obj in objectsInside)
 			{
+				if (obj == null) continue;
 				ConstantForce force = obj.gameObject.GetComponent<ConstantForce>();
 				Destroy(force);
 			}
