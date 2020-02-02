@@ -45,6 +45,7 @@ public class GrabbableObject : MonoBehaviour
 	{
 		RigidBody.constraints = RigidbodyConstraints.FreezeAll;
 		ObjectManager.Instance.RemoveObject(this);
+        GameManager.Instance.PlayZap();
 	}
 
 	public void Unlock()

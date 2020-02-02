@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class EndSequence : MonoBehaviour
 {
 	[SerializeField] private PlayableDirector director;
-	[SerializeField] private Transform cameraPoint;
+	public Transform cameraPoint;
 	[SerializeField] private Rigidbody avatar;
 	[SerializeField] private float WindForce;
 
@@ -50,7 +50,7 @@ public class EndSequence : MonoBehaviour
 
 	public void Kill()
 	{
-		Debug.Log("kill");
+		//Debug.Log("kill");
 		if(wall.IsWinningPlayer)
 		{
 			wall.Owner.SetWinningState(false);
@@ -59,7 +59,7 @@ public class EndSequence : MonoBehaviour
 		{
 			if (GameManager.Instance.NumPlayers > 1)
 			{
-				Destroy(wall.Owner.gameObject);
+				wall.Owner.GetCamera().gameObject.SetActive(false);
 			}
 			else
 			{

@@ -52,9 +52,9 @@ public class WallGenerator : MonoBehaviour
                 vertices[v1p] = new Vector3(holeVertices[hv1].x, holeVertices[hv1].y, depth);
 
                 uv[v0] = new Vector2(holeVertices[hv0].x / totalWidth + 0.5f, holeVertices[hv0].y / height + 0.5f);
-                uv[v1] = new Vector2(holeVertices[hv1].x / totalWidth + 0.5f, holeVertices[hv1].y / height + 0.5f);
-                uv[v0p] = new Vector2(holeVertices[hv0].x / totalWidth + 0.5f, holeVertices[hv0].y / height + 0.5f);
-                uv[v1p] = new Vector2(holeVertices[hv1].x / totalWidth + 0.5f, holeVertices[hv1].y / height + 0.5f);
+                uv[v1] = new Vector2(holeVertices[hv1].x / totalWidth + 0.5f + Random.Range(-0.01f, 0.01f), holeVertices[hv1].y / height + 0.5f + Random.Range(-0.01f, 0.01f));
+                uv[v0p] = uv[v0];
+                uv[v1p] = uv[v1];
 
                 triangles[0][6 * i] = v2;
                 triangles[0][6 * i + 1] = v1;
@@ -161,7 +161,10 @@ public class WallGenerator : MonoBehaviour
 		{
 			newOwner.SetWall(this);
 		}
-		Scoreboard.gameObject.SetActive(Owner != null);
+		if (Scoreboard != null)
+		{
+			Scoreboard.gameObject.SetActive(Owner != null);
+		}
 	}
 
     public void SetColor(Color color)
