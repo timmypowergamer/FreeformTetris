@@ -382,7 +382,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 97c7907c65c85404e8d3d19ba62fa1e2, type: 3}
   - {fileID: 2800000, guid: e0226966e0dd7b9469e48f303c47d6fe, type: 3}
   - {fileID: 2800000, guid: cd2ebe42a4fdd3345b3374cd4b9ec260, type: 3}
-  - {fileID: 2800000, guid: b6925117f3eed104dbc557fe6583efe8, type: 3}
+  - {fileID: 2800000, guid: 3a52a3f216a1c254b849c838027bebec, type: 3}
   - {fileID: 2800000, guid: 440fb55867f865541b37aaad981d0646, type: 3}
   - {fileID: 2800000, guid: b0a3afb86392cbb46bd28b06edc03f39, type: 3}
   - {fileID: 2800000, guid: ac1ae81e08b2f434e9dad3e6e72962ce, type: 3}
@@ -702,7 +702,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 299ce262276f13e43a52b3a40fb2b87d, type: 3}
+  m_Texture: {fileID: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
