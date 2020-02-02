@@ -10,16 +10,20 @@ public class WallGenerator : MonoBehaviour
     float totalWidth = 20;
     float width = 15;
     float height = 5;
-    float depth = 1;
+    float depth = 1f;
     float minRadius = 0.25f;
     float maxRadius = 0.75f;
     int numVertices = 32;
     float checkDiameter = 0.1f;
-	
-	float holeCoverage;
+
+	private float lastComputedScore = 0;
+	private List<Vector3> checkCenters;
+
+	[SerializeField] private ScoreboardScript Scoreboard;
+	[SerializeField] private bool DrawHitboxGizmos;
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
         var triggerVolume = GetComponent<Collider>();
         triggerVolume.bounds.size.Set(20, 5, 1);
@@ -118,55 +122,63 @@ public class WallGenerator : MonoBehaviour
         mf = GetComponent<MeshFilter>();
         mf.mesh = mesh;
         transform.GetComponent<MeshCollider>().sharedMesh = mesh;
-		
-		holeCoverage = 1.0f - computeCoverage("Default");
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        //var score = computeScore();
-        //Debug.Log($"{score}");
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        var component = other.GetComponentInParent<GrabbableObject>();
-        if(component == null) { return; }
-        component.Placed = true;
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        var component = other.GetComponentInParent<GrabbableObject>();
-        if (component == null) { return; }
-        component.Placed = false;
-    }
+	}
 
     private void OnDrawGizmos()
     {
         Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
         Gizmos.DrawCube(new Vector3(0, 0, depth / 2), new Vector3(totalWidth, height, depth));
         Gizmos.DrawWireCube(new Vector3(0, 0, depth / 2), new Vector3(width, height, depth));
-    }
+		if (DrawHitboxGizmos)
+		{
+			computeCoverage("Objects", DrawHitboxGizmos);
+		}
+	}
+
+	public void UpdateScoreboard()
+	{
+		lastComputedScore = computeScore();
+		Scoreboard.score = Mathf.RoundToInt(lastComputedScore * 100f);
+	}
 
     float computeScore()
 	{
-		return computeCoverage("Objects") / holeCoverage;
+		return computeCoverage("Objects", false);
 	}
 
-    float computeCoverage(string layer)
+	float computeCoverage(string layer, bool drawGizmos)
+	{
+		if (checkCenters == null) computeInitialCoverage("Default");
+		var localHalfExtents = new Vector3(0.5f * checkDiameter, 0.5f * checkDiameter, 0.6f * depth);
+		var objectsMask = LayerMask.GetMask(layer);
+
+		int count = 0;
+		foreach(Vector3 globalCenter in checkCenters)
+		{
+			if (drawGizmos) Gizmos.color = Color.white;
+			if (Physics.CheckBox(globalCenter, localHalfExtents, transform.rotation, objectsMask))
+			{
+				count++;
+				if (drawGizmos) Gizmos.color = Color.red;
+			}
+			if (drawGizmos) Gizmos.DrawWireCube(transform.InverseTransformPoint(globalCenter), localHalfExtents * 2);
+		}
+
+		return (float)count / checkCenters.Count;
+	}
+
+    void computeInitialCoverage(string layer)
     {
+		checkCenters = new List<Vector3>();
+
         int numChecksHoriz = Mathf.FloorToInt(width / checkDiameter);
         int numChecksVert = Mathf.FloorToInt(height / checkDiameter);
 
-        var localHalfExtents = new Vector3(0.5f * checkDiameter, 0.5f * checkDiameter, 0.5f * depth);
-        var globalHalfExtents = transform.TransformVector(localHalfExtents);
-        var quat = Quaternion.LookRotation(transform.forward, transform.up);
+
+        var localHalfExtents = new Vector3(0.5f * checkDiameter, 0.5f * checkDiameter, 0.6f * depth);
         float zLocal = 0.5f * depth;
         var objectsMask = LayerMask.GetMask(layer);
 
-        int count = 0;
         for (int row = 0; row < numChecksVert; row++)
         {
             float yLocal = (row + 0.5f) * checkDiameter - 0.5f * height;
@@ -175,14 +187,12 @@ public class WallGenerator : MonoBehaviour
                 float xLocal = (col + 0.5f) * checkDiameter - 0.5f * width;
                 var localCenter = new Vector3(xLocal, yLocal, zLocal);
                 var globalCenter = transform.TransformPoint(localCenter);
-                if (Physics.CheckBox(globalCenter, globalHalfExtents, quat, objectsMask))
-                {
-                    count++;
-                }
 
+				if (!Physics.CheckBox(globalCenter, localHalfExtents, transform.rotation, objectsMask))
+                {
+					checkCenters.Add(globalCenter);
+				}
             }
         }
-
-        return (float)count / numChecksHoriz / numChecksVert;
     }
 }

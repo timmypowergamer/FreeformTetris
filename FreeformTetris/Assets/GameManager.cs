@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] public Color[] colors;
 	[SerializeField] private GameObject _timerObject;
 	[SerializeField] private TextMeshProUGUI _timerText;
+	[SerializeField] private WallGenerator[] _walls;
 
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
@@ -146,6 +147,10 @@ public class GameManager : MonoBehaviour
 	{
 		while (gameTimeRemaining > 0)
 		{
+			foreach(WallGenerator wall in _walls)
+			{
+				wall.UpdateScoreboard();
+			}
 			await Task.Delay(1000);
 			gameTimeRemaining--;
 			_timerText.text = TimeRemaining.ToString(@"mm\:ss");
