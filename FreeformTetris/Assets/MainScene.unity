@@ -1091,6 +1091,11 @@ PrefabInstance:
       propertyPath: _walls.Array.data[3]
       value: 
       objectReference: {fileID: 2106386090}
+    - target: {fileID: 3778539237257509770, guid: a1f33270c2f266e43b0b5d0690e637a7,
+        type: 3}
+      propertyPath: MatchLength
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 3778539237257509771, guid: a1f33270c2f266e43b0b5d0690e637a7,
         type: 3}
       propertyPath: m_LocalPosition.x

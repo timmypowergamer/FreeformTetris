@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
 
 		PlayerHUDController hud = GetPlayerHUD(player);
 		_walls[player.playerIndex].SetOwner(player.GetComponent<PlayerController>());
+		_walls[player.playerIndex].SetColor(this.colors[player.playerIndex]);
 		hud.SetActive(true);
 		hud.SetPlayerNum(player.playerIndex);
 		hud.SetReady(false);
