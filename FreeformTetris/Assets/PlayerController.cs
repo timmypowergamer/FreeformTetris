@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
 
 	private PlayerHUDController HUD;
 	private WallGenerator wall;
+	private Vector3 cameraPos;
+	private Quaternion cameraRot;
 
 	//movement
 	private Vector2 MoveInputValue;
@@ -61,26 +63,25 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
 	private void OnEnable()
-	{
-		Input = GetComponent<PlayerInput>();
+	{		
         animator = GetComponentInChildren<Animator>();
-		spawnPoint = GameManager.Instance.GetSpawnPoint(Input);
 		GameManager.OnGameStarted += OnGameStart;
 		GameManager.OnGameFinished += OnGameFinished;
 
 		CurrentPlayerState = PlayerState.JOINED;
-		Controller.enabled = false;
-		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
-		Camera.enabled = false;
+		Controller.enabled = false;		
+		//Camera.enabled = false;
 		HUD = GameManager.Instance.GetPlayerHUD(Input);
-		HUD.SetReady(false);
-        animator.SetFloat("Forward", 0);
+		//HUD.SetReady(false);
+		GameManager.OnGameStarting += HUD.GameStarting;
+		animator.SetFloat("Forward", 0);
     }
 
     private void OnDisable()
 	{
 		GameManager.OnGameStarted -= OnGameStart;
 		GameManager.OnGameFinished -= OnGameFinished;
+		GameManager.OnGameStarting -= HUD.GameStarting;
 	}
 
 	public void Move(InputAction.CallbackContext context)
@@ -118,8 +119,8 @@ public class PlayerController : MonoBehaviour
 			if (CurrentPlayerState == PlayerState.JOINED)
 			{
 				CurrentPlayerState = PlayerState.READY;
-				GameManager.Instance.ToggleReady(Input);
 				HUD.SetReady(true);
+				GameManager.Instance.ToggleReady(Input);
 			}
 			else if (CurrentPlayerState == PlayerState.WINNER)
 			{
@@ -139,7 +140,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if(CurrentPlayerState == PlayerState.JOINED)
 			{				
-				Destroy(gameObject);
+				//Destroy(gameObject);
 			}
 			else if (CurrentPlayerState == PlayerState.READY)
 			{
@@ -170,7 +171,9 @@ public class PlayerController : MonoBehaviour
 		CurrentPlayerState = PlayerState.PLAYING;
 		Velocity = Vector3.zero;
 		Controller.enabled = true;
-		Camera.enabled = true;
+		//Camera.enabled = true;
+		Camera.transform.localPosition = cameraPos;
+		Camera.transform.localRotation = cameraRot;
 		CurrentGroundState = GroundState.GROUNDED;
     }
 
@@ -254,6 +257,14 @@ public class PlayerController : MonoBehaviour
 
 	public void SetWall(WallGenerator wall)
 	{
+		Input = GetComponent<PlayerInput>();
 		this.wall = wall;
+		var end = wall.GetComponentInChildren<EndSequence>();
+		cameraPos = Camera.transform.localPosition;
+		cameraRot = Camera.transform.localRotation;
+		spawnPoint = GameManager.Instance.GetSpawnPoint(Input);
+		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
+		Camera.transform.position = end.cameraPoint.position;
+		Camera.transform.rotation = end.cameraPoint.rotation;
 	}
 }

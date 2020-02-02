@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class EndSequence : MonoBehaviour
 {
 	[SerializeField] private PlayableDirector director;
-	[SerializeField] private Transform cameraPoint;
+	public Transform cameraPoint;
 	[SerializeField] private Rigidbody avatar;
 	[SerializeField] private float WindForce;
 

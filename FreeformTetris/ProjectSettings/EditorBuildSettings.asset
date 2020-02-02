@@ -9,14 +9,14 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
+    path: Assets/IntroAnimationScene.unity
+    guid: ae0e41497f6f3724ca0de4cd13a1e8d8
+  - enabled: 1
     path: Assets/TitleScene.unity
     guid: 3b257dcaa9bdc2b42a2fe1feb4448bc0
   - enabled: 1
     path: Assets/MainScene.unity
     guid: b0e6b3d66c017484180343306d41fed7
-  - enabled: 1
-    path: Assets/IntroAnimationScene.unity
-    guid: ae0e41497f6f3724ca0de4cd13a1e8d8
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 0ce1c936f6e7cda4a816f106e2482a24,
       type: 2}
