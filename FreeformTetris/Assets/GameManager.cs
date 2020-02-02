@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
 				winner = wall;
 			}
 		}
-		if(_walls.Length > 1 || bestScore >= minimumSPWinThreshold) winner.IsWinningPlayer = true;
+		if(activePlayers.Count > 1 || bestScore >= minimumSPWinThreshold) winner.IsWinningPlayer = true;
 		OnGameFinished?.Invoke();
 	}
 }
