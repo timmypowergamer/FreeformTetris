@@ -7,9 +7,9 @@ public class ObjectManager : MonoBehaviour
     public static ObjectManager Instance;
 
     public GrabbableObject[] prefabs;
-    const int max = 50;
+    const int max = 100;
     float nextSpawn = 0.0f;
-    const float spawnTick = 0.75f;
+    const float spawnTick = 0.65f;
     bool running = false;
 	//float spawnradius = 4f;
 
