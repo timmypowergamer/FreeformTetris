@@ -7,11 +7,12 @@ public class ObjectManager : MonoBehaviour
     public static ObjectManager Instance;
 
     public GrabbableObject[] prefabs;
-    public int freeObjects;
     const int max = 30;
     float nextSpawn = 0.0f;
     const float spawnTick = 1.0f;
     bool running = false;
+
+	List<GrabbableObject> spawnedObjects = new List<GrabbableObject>();
 
     private void Awake()
     {
@@ -26,12 +27,14 @@ public class ObjectManager : MonoBehaviour
 	private void OnEnable()
 	{
 		GameManager.OnGameStarted += startRunning;
+		GameManager.OnGameFinished += DespawnAll;
 	}
 
 	private void OnDisable()
     {
         GameManager.OnGameStarted -= startRunning;
-    }
+		GameManager.OnGameFinished -= DespawnAll;
+	}
 
     private void startRunning()
     {
@@ -46,7 +49,7 @@ public class ObjectManager : MonoBehaviour
             nextSpawn += spawnTick;
             if(running)
             {
-                if (freeObjects < max)
+                if (spawnedObjects.Count < max)
                 {
                     spawnObject();
                 }
@@ -61,6 +64,32 @@ public class ObjectManager : MonoBehaviour
         var scale = Random.Range(0.9f, 1.5f);
         scale = Mathf.Pow(scale, 2);
         obj.transform.localScale = new Vector3(scale, scale, scale);
-        freeObjects++;
+		spawnedObjects.Add(obj);
     }
+
+	public void RemoveObject(GrabbableObject obj)
+	{
+		if(spawnedObjects.Contains(obj))
+		{
+			spawnedObjects.Remove(obj);
+		}
+	}
+
+	public void AddObject(GrabbableObject obj)
+	{
+		if (!spawnedObjects.Contains(obj))
+		{
+			spawnedObjects.Add(obj);
+		}
+	}
+
+	public void DespawnAll()
+	{
+		running = false;
+		foreach(GrabbableObject obj in new List<GrabbableObject>(spawnedObjects))
+		{
+			RemoveObject(obj);
+			Destroy(obj.gameObject);
+		}
+	}
 }

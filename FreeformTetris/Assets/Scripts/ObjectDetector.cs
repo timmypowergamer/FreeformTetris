@@ -55,11 +55,22 @@ public class ObjectDetector : MonoBehaviour
 
 	public void BreakAll()
 	{
-		foreach (GrabbableObject obj in objectsInside)
+		if (!wall.IsWinningPlayer)
 		{
-			SpringJoint fixie = obj.gameObject.GetComponent<SpringJoint>();
-			Destroy(fixie);
-			obj.transform.SetLayerRecursively("ObjectInteraction");
+			foreach (GrabbableObject obj in objectsInside)
+			{
+				SpringJoint fixie = obj.gameObject.GetComponent<SpringJoint>();
+				Destroy(fixie);
+				obj.transform.SetLayerRecursively("ObjectInteraction");
+			}
+		}
+		else
+		{
+			foreach (GrabbableObject obj in objectsInside)
+			{
+				ConstantForce force = obj.gameObject.GetComponent<ConstantForce>();
+				Destroy(force);
+			}
 		}
 	}
 }

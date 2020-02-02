@@ -19,6 +19,7 @@ public class WallGenerator : MonoBehaviour
 	private float lastComputedScore = 0;
 	private List<Vector3> checkCenters;
 
+    [SerializeField] private Color color;
 	[SerializeField] private ScoreboardScript Scoreboard;
 	[SerializeField] private bool DrawHitboxGizmos;
 
@@ -152,6 +153,12 @@ public class WallGenerator : MonoBehaviour
 			newOwner.SetWall(this);
 		}
 	}
+
+    public void SetColor(Color color)
+    {
+        this.color = color;
+        this.Scoreboard.GetComponent<MeshRenderer>().material.color = color;
+    }
 
     float computeScore()
 	{

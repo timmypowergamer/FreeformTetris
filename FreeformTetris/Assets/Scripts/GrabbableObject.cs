@@ -32,7 +32,7 @@ public class GrabbableObject : MonoBehaviour
 		if (RigidBody.transform.position.y < -3)
 		{
 			Destroy(this.gameObject);
-			ObjectManager.Instance.freeObjects--;
+			ObjectManager.Instance.RemoveObject(this);
 		}
 	}
 
@@ -44,12 +44,12 @@ public class GrabbableObject : MonoBehaviour
 	public void Lock()
 	{
 		RigidBody.constraints = RigidbodyConstraints.FreezeAll;
-		ObjectManager.Instance.freeObjects--;
+		ObjectManager.Instance.RemoveObject(this);
 	}
 
 	public void Unlock()
 	{
 		RigidBody.constraints = RigidbodyConstraints.None;
-		ObjectManager.Instance.freeObjects++;
+		ObjectManager.Instance.AddObject(this);
 	}
 }
