@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
 		CurrentPlayerState = PlayerState.JOINED;
 		Controller.enabled = false;		
-		//Camera.enabled = false;
+		//Camera.enabled = false;iok 0                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 		HUD = GameManager.Instance.GetPlayerHUD(Input);
 		//HUD.SetReady(false);
 		GameManager.OnGameStarting += HUD.GameStarting;
@@ -248,6 +248,9 @@ public class PlayerController : MonoBehaviour
 		{
 			HUD.SetWinner();
 		}
+		Camera.rect = new Rect(Vector2.zero, Vector2.one);
+		//Camera.depth = 5;
+		GameManager.Instance.SetWinner(Input.playerIndex);
 	}
 
 	public Camera GetCamera()

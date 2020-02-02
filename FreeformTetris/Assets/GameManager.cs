@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource GameAudio;
 	[SerializeField] private GameObject p3_camera;
 	[SerializeField] private TextMeshProUGUI _countdownText;
+	[SerializeField] private Transform _endHudParent;
 
 	private List<PlayerInput> activePlayers = new List<PlayerInput>();
 	private List<PlayerInput> readyPlayers = new List<PlayerInput>();
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
 		hud.SetReady(false);
 		_hud34Parent.gameObject.SetActive(activePlayers.Count >= 3);
 		p3_camera.SetActive(activePlayers.Count > 0);
+		_countdownText.transform.parent.gameObject.SetActive(false);
 	}
 
 	public void PlayerLeft(PlayerInput player)
@@ -206,5 +208,20 @@ public class GameManager : MonoBehaviour
 		}
 		if(activePlayers.Count > 1 || bestScore >= minimumSPWinThreshold) winner.IsWinningPlayer = true;
 		OnGameFinished?.Invoke();
+	}
+
+	public void SetWinner(int playerNum)
+	{
+		for (int i = 0; i < playerHUDs.Count; i++)
+		{
+			if (i == playerNum)
+			{
+				playerHUDs[i].transform.SetParent(_endHudParent, false);
+			}
+			else
+			{
+				playerHUDs[i].gameObject.SetActive(false);
+			}
+		}
 	}
 }
