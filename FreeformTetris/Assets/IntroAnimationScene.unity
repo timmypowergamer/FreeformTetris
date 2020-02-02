@@ -374,6 +374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TitleScene: TitleScene
   slides:
+  - {fileID: 0}
   - {fileID: 2800000, guid: 299ce262276f13e43a52b3a40fb2b87d, type: 3}
   - {fileID: 2800000, guid: f9f5bd3bdd4282541b75cbaa29641b18, type: 3}
   - {fileID: 2800000, guid: 2413004ff92e16c43bfba520794e6167, type: 3}
@@ -381,13 +382,13 @@ MonoBehaviour:
   - {fileID: 2800000, guid: da5dd221f3c397946afde707ca6067ba, type: 3}
   - {fileID: 2800000, guid: 97c7907c65c85404e8d3d19ba62fa1e2, type: 3}
   - {fileID: 2800000, guid: e0226966e0dd7b9469e48f303c47d6fe, type: 3}
-  - {fileID: 2800000, guid: cd2ebe42a4fdd3345b3374cd4b9ec260, type: 3}
+  - {fileID: 2800000, guid: 2f0697a3bb81950489c99ae911bddece, type: 3}
   - {fileID: 2800000, guid: 3a52a3f216a1c254b849c838027bebec, type: 3}
-  - {fileID: 2800000, guid: 440fb55867f865541b37aaad981d0646, type: 3}
+  - {fileID: 2800000, guid: 3a63384266e7e54429790beda9d6bec1, type: 3}
   - {fileID: 2800000, guid: 87db1f3a92a26594ba4d487f00b30d33, type: 3}
   - {fileID: 2800000, guid: 1022fe51c33ad7c4c8464ab5fb434af2, type: 3}
-  - {fileID: 2800000, guid: 2e39f6e0655070e46bae71dbc420188d, type: 3}
-  - {fileID: 2800000, guid: fea836da515effe4b88e20d53b4dd946, type: 3}
+  - {fileID: 2800000, guid: 6cca6949e98b25248813332e474b32c1, type: 3}
+  - {fileID: 2800000, guid: 9f38580b3ebf35047afa468c8c36c9c5, type: 3}
   - {fileID: 2800000, guid: af97e9c59fa751f44bc965553635e0b1, type: 3}
   - {fileID: 2800000, guid: 90f4cdacca650c64181907e6ab7c7545, type: 3}
   - {fileID: 2800000, guid: ef1ae5e116aeaaa4ab2673f72cc9ab35, type: 3}
@@ -396,6 +397,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 2fd2f805684bab7448bfa1e24d781a58, type: 3}
   - {fileID: 2800000, guid: 55400c726f05e4f48b399b7773e298b7, type: 3}
   altslides:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -428,20 +430,21 @@ MonoBehaviour:
   - 2
   - 2
   - 2
+  - 2
   - 4
   - 2
   - 2
   - 2
-  - 1
-  - 1
-  - 1
   - 2
+  - 1
+  - 1
+  - 1
   - 2
   - 6
   - 4
   - 6
-  useAlt: 00000000010001000000010000000000000001010000
-  currentSlide: 1
+  useAlt: 00000000000100010000000100000000000000010100
+  currentSlide: 11
   slidecanvas: {fileID: 992561986}
 --- !u!114 &509147898
 MonoBehaviour:
@@ -534,6 +537,7 @@ GameObject:
   - component: {fileID: 586541445}
   - component: {fileID: 586541444}
   - component: {fileID: 586541443}
+  - component: {fileID: 586541446}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -608,6 +612,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &586541446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586541442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cf2067b014e92246bd16196bfb2e5a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TitleScene: TitleScene
 --- !u!1 &926161605
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +744,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 299ce262276f13e43a52b3a40fb2b87d, type: 3}
+  m_Texture: {fileID: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
