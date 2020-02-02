@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
 	public enum PlayerState
 	{
+		NONE,
 		JOINED,
 		READY,
 		SPAWNING,
@@ -39,6 +40,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private LayerMask GroundMask;
 	[SerializeField] private float JumpVelocity = 10f;
 
+	private PlayerHUDController HUD;
+
 	//movement
 	private Vector2 MoveInputValue;
 	private Vector2 LookInputValue;
@@ -63,6 +66,7 @@ public class PlayerController : MonoBehaviour
 		Controller.enabled = false;
 		transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.localRotation);
 		Camera.enabled = false;
+		HUD = GameManager.Instance.GetPlayerHUD(Input);
 	}
 
 	private void OnDisable()
@@ -106,15 +110,28 @@ public class PlayerController : MonoBehaviour
 			{
 				CurrentPlayerState = PlayerState.READY;
 				GameManager.Instance.ToggleReady(Input);
+				HUD.SetReady(true);
 			}
 			else if (CurrentPlayerState == PlayerState.READY)
 			{
 				CurrentPlayerState = PlayerState.JOINED;
 				GameManager.Instance.ToggleReady(Input);
+				HUD.SetReady(false);
 			}
 			else if (CurrentPlayerState == PlayerState.PLAYING)
 			{
 				jumpPressed = true;
+			}
+		}
+	}
+
+	public void Leave(InputAction.CallbackContext context)
+	{
+		if(context.phase == InputActionPhase.Performed)
+		{
+			if(CurrentPlayerState == PlayerState.JOINED)
+			{				
+				Destroy(gameObject);
 			}
 		}
 	}
@@ -126,6 +143,7 @@ public class PlayerController : MonoBehaviour
 
 	public void Respawn()
 	{
+		HUD.Spawned();
 		CurrentPlayerState = PlayerState.PLAYING;
 		Velocity = Vector3.zero;
 		Controller.enabled = true;
