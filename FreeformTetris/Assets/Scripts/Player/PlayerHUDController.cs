@@ -32,6 +32,8 @@ public class PlayerHUDController : MonoBehaviour
 		"Good Enough!",
 		"You Did It!",
 		"Adequate Work!",
+		"You've Maintained Your Honour.",
+		"You Should Work in Construction!"
 	};
 
 	private string[] loseText =
@@ -42,7 +44,10 @@ public class PlayerHUDController : MonoBehaviour
 		"Not Your Best Work",
 		"Weak!",
 		"Your Wall is a Source of Shame",
-		"You Participated!"
+		"You Participated!",
+		"Git Gud.",
+		"You Have Been Consumed by an Unspeakable Horror.",
+		"There are no words."
 	};
 
 	public void SetPlayerNum(int playerNum)
