@@ -382,10 +382,10 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 97c7907c65c85404e8d3d19ba62fa1e2, type: 3}
   - {fileID: 2800000, guid: e0226966e0dd7b9469e48f303c47d6fe, type: 3}
   - {fileID: 2800000, guid: cd2ebe42a4fdd3345b3374cd4b9ec260, type: 3}
-  - {fileID: 2800000, guid: b6925117f3eed104dbc557fe6583efe8, type: 3}
+  - {fileID: 2800000, guid: 3a52a3f216a1c254b849c838027bebec, type: 3}
   - {fileID: 2800000, guid: 440fb55867f865541b37aaad981d0646, type: 3}
-  - {fileID: 2800000, guid: b0a3afb86392cbb46bd28b06edc03f39, type: 3}
-  - {fileID: 2800000, guid: ac1ae81e08b2f434e9dad3e6e72962ce, type: 3}
+  - {fileID: 2800000, guid: 87db1f3a92a26594ba4d487f00b30d33, type: 3}
+  - {fileID: 2800000, guid: 1022fe51c33ad7c4c8464ab5fb434af2, type: 3}
   - {fileID: 2800000, guid: 2e39f6e0655070e46bae71dbc420188d, type: 3}
   - {fileID: 2800000, guid: fea836da515effe4b88e20d53b4dd946, type: 3}
   - {fileID: 2800000, guid: 7df986d4bd9c5254d89b02bdffadfdc9, type: 3}
@@ -404,7 +404,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2800000, guid: eb434e174442dfa4aa0995e58d6264c1, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -424,17 +424,17 @@ MonoBehaviour:
   - 2
   - 2
   - 2
-  - 2
-  - 2
-  - 2
-  - 2
-  - 2
-  - 2
-  - 2
   - 4
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 2
+  - 6
   - 4
-  - 4
-  useAlt: 0000000001000100000000000000000001010000
+  - 6
+  useAlt: 0000000001000100000001000000000001010000
   currentSlide: 1
   slidecanvas: {fileID: 992561986}
 --- !u!114 &509147898

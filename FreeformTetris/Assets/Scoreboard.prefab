@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 578691425713974418}
   - component: {fileID: 501137144517233959}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 5611786580235101355}
   - component: {fileID: 6496159907117913456}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,7 +218,7 @@ Transform:
   m_Children:
   - {fileID: 5653214922541978124}
   m_Father: {fileID: 5668249951549046340}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &6457931581224490858
 MeshRenderer:
@@ -328,7 +328,7 @@ Transform:
   m_Children:
   - {fileID: 6430580810047772891}
   m_Father: {fileID: 5668249951549046340}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &915316385951839498
 MeshRenderer:
@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 3784224203830296481}
   - component: {fileID: 1787159744523407250}
   - component: {fileID: 3980666136702098419}
+  - component: {fileID: 8172668161584007358}
   m_Layer: 0
   m_Name: Scoreboard
   m_TagString: Untagged
@@ -434,8 +435,8 @@ Transform:
   m_LocalPosition: {x: -2.21875, y: 3.96, z: 7.72}
   m_LocalScale: {x: 10, y: 1.5, z: 0.1}
   m_Children:
-  - {fileID: 4774560272711184253}
   - {fileID: 6938386308982705850}
+  - {fileID: 4774560272711184253}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -499,3 +500,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8172668161584007358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8172694569728883792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93cd86c5cacc09f4eb5b1a829eab642b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 10
